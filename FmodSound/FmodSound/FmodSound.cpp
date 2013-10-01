@@ -3,6 +3,16 @@
 
 #include "stdafx.h"
 #include "FmodSound.h"
+#include <stdio.h>
+
+// fmod api 관련 설정
+#include <fmod.h>
+#include <fmod.hpp>
+#include <fmod_errors.h>
+
+#pragma  comment( lib, "fmodex_vc.lib" )
+
+// 여기까지 
 
 #define MAX_LOADSTRING 100
 
@@ -16,6 +26,17 @@ ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
+
+// Fmod 테스트용 함수들
+void DemoSound();
+void PLAYsound();
+void DeleteSound();
+
+// Fmod 선언 변수
+FMOD::System *systemS = NULL;
+FMOD::Sound *sound = NULL;
+FMOD::Channel *channel = NULL;
+
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -131,12 +152,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
+	
+		// 추가 구문
+	case WM_CREATE:
+		{
+			CreateWindowA("button", "PLAY", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
+				100,100, 80,40, hWnd, (HMENU)100, NULL, NULL );
+			CreateWindowA("button", "STOP", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
+				300,100, 80,40, hWnd, (HMENU)101, NULL, NULL );
+			CreateWindowA("button", "GO", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
+				500,100, 80,40, hWnd, (HMENU)102, NULL, NULL );
+			DemoSound();
+		}
+		break;
+
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
 		wmEvent = HIWORD(wParam);
 		// 메뉴 선택을 구문 분석합니다.
 		switch (wmId)
 		{
+		case 100: PLAYsound(); break;
+		case 101: { channel->setPaused(true); }break;
+		case 102: { channel->setPaused(false); }break;
+
 		case IDM_ABOUT:
 			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
 			break;
@@ -153,6 +192,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:
+		DeleteSound();
 		PostQuitMessage(0);
 		break;
 	default:
@@ -179,4 +219,44 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	return (INT_PTR)FALSE;
+}
+
+
+
+// Fmod 추가 사항
+
+void ERRCHECK(FMOD_RESULT result)
+{
+	if (result != FMOD_OK)
+	{
+		char str[256] = {0,};
+		sprintf_s(str, "FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+		MessageBoxA(NULL, str, "TEST", MB_OK  );
+	}
+}
+
+void DemoSound()
+{
+	FMOD_RESULT result;
+	result = FMOD::System_Create(&systemS);  // Create the main system object.
+	ERRCHECK(result);
+	result = systemS->init(2, FMOD_INIT_NORMAL, 0); // Initialize FMOD.
+	ERRCHECK(result);
+	// 사운드로딩
+	result = systemS->createSound("effect.wav", FMOD_DEFAULT, 0, &sound);  // FMOD_DEFAULT uses the defaults.  These are the same as FMOD_LOOP_OFF | FMOD_2D | FMOD_HARDWARE.
+	ERRCHECK(result);
+}
+
+void PLAYsound()
+{
+	FMOD_RESULT result;
+	result = systemS->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
+	channel->setVolume(1);
+	ERRCHECK(result);
+}
+
+void DeleteSound()
+{
+	if(sound) sound->release();
+	if(systemS) systemS->release();
 }
