@@ -5,14 +5,13 @@
 #include "FmodSound.h"
 #include <stdio.h>
 
-// fmod api 관련 설정
+// -- Fmod API를 사용하기 위한 선언
 #include <fmod.h>
 #include <fmod.hpp>
 #include <fmod_errors.h>
 
 #pragma  comment( lib, "fmodex_vc.lib" )
-
-// 여기까지 
+// -- 여기까지 
 
 #define MAX_LOADSTRING 100
 
@@ -27,12 +26,15 @@ BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
-// Fmod 테스트용 함수들
+// -- Fmod 테스트용 함수
 void DemoSound();
 void PLAYsound();
 void DeleteSound();
 
-// Fmod 선언 변수
+//-- 버튼 관리용 핸들을 위한 전역 변수 및 초기화
+HWND hWndButton = NULL;
+
+//-- Fmod 사용을 위한 전역 변수 선언 및 초기화
 FMOD::System *systemS = NULL;
 FMOD::Sound *sound = NULL;
 FMOD::Channel *channel = NULL;
@@ -150,21 +152,46 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	PAINTSTRUCT ps;
 	HDC hdc;
 
+
+	//-- Fmod에서 볼륨 조절을 하기 위한 변수
+	float	fVolume = 0;
+	bool	isMute = false;
+	bool	isPlaying = false;
+	bool	isPaused = false;
+	//-- 여기까지
+
 	switch (message)
 	{
 	
 		// 추가 구문
+
+		//-- 추가 된 코드
 	case WM_CREATE:
 		{
-			CreateWindowA("button", "PLAY", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
-				100,100, 80,40, hWnd, (HMENU)100, NULL, NULL );
-			CreateWindowA("button", "STOP", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
-				300,100, 80,40, hWnd, (HMENU)101, NULL, NULL );
-			CreateWindowA("button", "GO", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
-				500,100, 80,40, hWnd, (HMENU)102, NULL, NULL );
+			// 초기 생성 시에만 한 번 뿌려주는 버튼
+			if(hWndButton == NULL)
+				hWndButton = CreateWindowA("button", "Play", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
+					100,100, 80,40, hWnd, (HMENU)100, NULL, NULL );
+			// 여기까지
+
+			CreateWindowA("button", "Stop", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
+				200,100, 80,40, hWnd, (HMENU)101, NULL, NULL );
+			CreateWindowA("button", "Change", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
+				300,100, 80,40, hWnd, (HMENU)102, NULL, NULL );
+			CreateWindowA("button", "Vol +", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
+				100,200, 80,40, hWnd, (HMENU)200, NULL, NULL );
+			CreateWindowA("button", "Vol -", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
+				200,200, 80,40, hWnd, (HMENU)201, NULL, NULL );
+			CreateWindowA("button", "Mute", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
+				300,200, 80,40, hWnd, (HMENU)202, NULL, NULL );
+
+			// 버튼을 추가하고 이 구문 바로 밑의 WM_COMMAND에서 파싱 될 메뉴 인덱스를 매핑함.
+
 			DemoSound();
+			// 데모 함수
 		}
 		break;
+		//-- 여기까지
 
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
@@ -172,9 +199,80 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		// 메뉴 선택을 구문 분석합니다.
 		switch (wmId)
 		{
-		case 100: PLAYsound(); break;
-		case 101: { channel->setPaused(true); }break;
-		case 102: { channel->setPaused(false); }break;
+
+			//-- 임시로 추가한 위의 버튼에 매핑 된 인덱스의 명령어들
+		case 100:
+			channel->isPlaying(&isPlaying);
+
+			if(!isPlaying)
+			{
+				PLAYsound();
+				// 재생 시작
+				SetWindowTextA(hWndButton, "Pause");
+			}
+			else
+			// 재생 중
+			{
+				isPaused = false;
+				channel->getPaused(&isPaused);
+				
+				if(isPaused)
+				{
+					channel->setPaused(false);
+					// 재생 중
+					SetWindowTextA(hWndButton, "Pause");
+				}
+				else
+				{
+					channel->setPaused(true);
+					// 일시 정지 상태
+					SetWindowTextA(hWndButton, "Play Again");
+				}
+			}
+			break;
+
+		case 101:
+			channel->stop();
+			// 정지 상태
+			SetWindowTextA(hWndButton, "Play");
+			break;
+
+		case 102:
+			channel->stop();
+			break;
+
+		case 200:
+			channel->getMute(&isMute);
+			if(isMute)
+			{
+				channel->setVolume(0);
+				channel->setMute(false);
+			}
+
+			channel->getVolume(&fVolume);
+			
+			if(fVolume < 1)
+				channel->setVolume(fVolume + static_cast<float>(0.1));
+			else
+				channel->setVolume(1);
+			break;
+
+		case 201:
+			channel->getVolume(&fVolume);
+			if(fVolume > 0.1)
+				channel->setVolume(fVolume - static_cast<float>(0.1));
+			else
+				channel->setVolume(0);
+			break;
+			
+		case 202:
+			channel->getMute(&isMute);
+			if(isMute)
+				channel->setMute(false);
+			else
+				channel->setMute(true);
+			break;
+			//-- 여기까지
 
 		case IDM_ABOUT:
 			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
@@ -189,10 +287,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
 		// TODO: 여기에 그리기 코드를 추가합니다.
+
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:
+
+		//-- Fmod 생성한 객체 삭제
 		DeleteSound();
+		//-- 여기까지
+
 		PostQuitMessage(0);
 		break;
 	default:
@@ -223,8 +326,9 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 
-// Fmod 추가 사항
+//-- Fmod 사용을 위한 추가 코드
 
+// 에러 체크
 void ERRCHECK(FMOD_RESULT result)
 {
 	if (result != FMOD_OK)
@@ -235,28 +339,42 @@ void ERRCHECK(FMOD_RESULT result)
 	}
 }
 
+// 테스트용 데모 파일 로딩
 void DemoSound()
 {
 	FMOD_RESULT result;
+
 	result = FMOD::System_Create(&systemS);  // Create the main system object.
 	ERRCHECK(result);
+	
 	result = systemS->init(2, FMOD_INIT_NORMAL, 0); // Initialize FMOD.
 	ERRCHECK(result);
+	
 	// 사운드로딩
-	result = systemS->createSound("effect.wav", FMOD_DEFAULT, 0, &sound);  // FMOD_DEFAULT uses the defaults.  These are the same as FMOD_LOOP_OFF | FMOD_2D | FMOD_HARDWARE.
+	result = systemS->createSound("BGM.mp3", FMOD_DEFAULT, 0, &sound);  // FMOD_DEFAULT uses the defaults.  These are the same as FMOD_LOOP_OFF | FMOD_2D | FMOD_HARDWARE.
 	ERRCHECK(result);
 }
 
+// 재생
 void PLAYsound()
 {
 	FMOD_RESULT result;
 	result = systemS->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
-	channel->setVolume(1);
+	channel->setVolume(0.5);
 	ERRCHECK(result);
 }
 
+// 소멸 처리
 void DeleteSound()
 {
-	if(sound) sound->release();
-	if(systemS) systemS->release();
+	if(sound)
+	{
+		sound->release();
+		sound = NULL;
+	}
+	if(systemS)
+	{
+		systemS->release();
+		systemS = NULL;
+	}
 }
