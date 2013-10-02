@@ -33,11 +33,15 @@ void DeleteSound();
 
 //-- 버튼 관리용 핸들을 위한 전역 변수 및 초기화
 HWND hWndButton = NULL;
+HWND hWndMain = NULL;
 
 //-- Fmod 사용을 위한 전역 변수 선언 및 초기화
 FMOD::System *systemS = NULL;
 FMOD::Sound *sound = NULL;
 FMOD::Channel *channel = NULL;
+
+//-- 윈도우 이동용 함수 선언
+void SetMoveWindow(HWND hWnd, WPARAM wParam);
 
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
@@ -118,22 +122,24 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   HWND hWnd;
+	HWND hWnd;
+	hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
+	hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
-   hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+	if (!hWnd)
+	{
+		return FALSE;
+	}
 
-   if (!hWnd)
-   {
-      return FALSE;
-   }
+	ShowWindow(hWnd, nCmdShow);
+	UpdateWindow(hWnd);
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+	if(hWndMain == NULL)
+		hWndMain = hWnd;
 
-   return TRUE;
+	return TRUE;
 }
 
 //
@@ -164,6 +170,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	
 		// 추가 구문
+
+	case WM_KEYDOWN:
+		SetMoveWindow(hWndMain, wParam);
+	break;
 
 		//-- 추가 된 코드
 	case WM_CREATE:
@@ -385,4 +395,37 @@ void DeleteSound()
 		systemS->release();
 		systemS = NULL;
 	}
+}
+
+void SetMoveWindow( HWND hWnd, WPARAM wParam )
+{
+	// 윈도우의 위치와 크기(RECT)를 가져온다.
+	RECT rt;
+	GetWindowRect(hWnd, &rt);
+
+	int moveOffset = 10;
+
+	switch (wParam)
+	{
+	case 'W':
+		rt.top -= moveOffset;
+		rt.bottom -= moveOffset;
+		break;
+	case 'A':
+		rt.left -= moveOffset;
+		rt.right -= moveOffset;
+		break;
+	case 'S':
+		rt.top += moveOffset;
+		rt.bottom += moveOffset;
+		break;
+	case 'D':
+		rt.left += moveOffset;
+		rt.right += moveOffset;
+		break;
+	default:
+		break;
+	}
+
+	MoveWindow(hWnd, rt.left, rt.top, rt.right - rt.left, rt.bottom - rt.top, TRUE);
 }
