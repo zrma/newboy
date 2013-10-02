@@ -10,7 +10,7 @@
 #include <fmod.hpp>
 #include <fmod_errors.h>
 
-#pragma  comment( lib, "fmodex_vc.lib" )
+// #pragma  comment( lib, "fmodex_vc.lib" )
 // -- 여기까지 
 
 #define MAX_LOADSTRING 100
@@ -27,13 +27,13 @@ LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
 // -- Fmod 테스트용 함수
-void DemoSound();
+void InitSound();
+void LoadSound();
 void PLAYsound();
 void DeleteSound();
 
 //-- 버튼 관리용 핸들을 위한 전역 변수 및 초기화
 HWND hWndButton = NULL;
-HWND hWndMain = NULL;
 
 //-- Fmod 사용을 위한 전역 변수 선언 및 초기화
 FMOD::System *systemS = NULL;
@@ -136,9 +136,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
-	if(hWndMain == NULL)
-		hWndMain = hWnd;
-
 	return TRUE;
 }
 
@@ -172,7 +169,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		// 추가 구문
 
 	case WM_KEYDOWN:
-		SetMoveWindow(hWndMain, wParam);
+		SetMoveWindow(hWnd, wParam);
 	break;
 
 		//-- 추가 된 코드
@@ -180,8 +177,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			// 초기 생성 시에만 한 번 뿌려주는 버튼
 			if(hWndButton == NULL)
+			{
 				hWndButton = CreateWindowA("button", "Play", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
 					100,100, 80,40, hWnd, (HMENU)100, NULL, NULL );
+			
+				InitSound();
+				LoadSound();
+			}
 			// 여기까지
 
 			CreateWindowA("button", "Stop", WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
@@ -196,9 +198,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				300,200, 80,40, hWnd, (HMENU)202, NULL, NULL );
 
 			// 버튼을 추가하고 이 구문 바로 밑의 WM_COMMAND에서 파싱 될 메뉴 인덱스를 매핑함.
-
-			DemoSound();
-			// 데모 함수
 		}
 		break;
 		//-- 여기까지
@@ -358,7 +357,7 @@ void ERRCHECK(FMOD_RESULT result)
 }
 
 // 테스트용 데모 파일 로딩
-void DemoSound()
+void InitSound()
 {
 	FMOD_RESULT result;
 
@@ -367,9 +366,15 @@ void DemoSound()
 	
 	result = systemS->init(2, FMOD_INIT_NORMAL, 0); // Initialize FMOD.
 	ERRCHECK(result);
-	
+}
+
+// 로딩
+void LoadSound()
+{
+	FMOD_RESULT result;
+
 	// 사운드로딩
-	result = systemS->createSound("BGM.mp3", FMOD_DEFAULT, 0, &sound);  // FMOD_DEFAULT uses the defaults.  These are the same as FMOD_LOOP_OFF | FMOD_2D | FMOD_HARDWARE.
+	result = systemS->createSound("BGM.mp3", FMOD_LOOP_NORMAL, 0, &sound);  // FMOD_DEFAULT uses the defaults.  These are the same as FMOD_LOOP_OFF | FMOD_2D | FMOD_HARDWARE.
 	ERRCHECK(result);
 }
 
@@ -393,6 +398,7 @@ void DeleteSound()
 	if(systemS)
 	{
 		systemS->release();
+		systemS->close();
 		systemS = NULL;
 	}
 }
