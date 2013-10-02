@@ -297,6 +297,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		//-- 여기까지
 
 		PostQuitMessage(0);
+		/*	실제 프로세스를 종료하는 함수
+		
+			프로그램 종료를 시도하면(x 버튼 => 닫기를 누르면)
+			창을 닫고 WM_DESTROY 메시지를 보냄.
+		
+			WM_DESTORY 메시지를 여기서 캐치해서 PostQuitMessage() api를 호출하여 실제 프로세스를 종료함.
+		*/
+
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
