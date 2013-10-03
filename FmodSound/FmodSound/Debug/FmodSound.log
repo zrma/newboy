@@ -1,0 +1,15 @@
+﻿빌드 시작: 2013-10-03 오전 3:10:08
+     1>2 노드의 "C:\Users\zrma\Documents\SVN\NEWBOY\trunk\FmodSound\FmodSound\FmodSound.vcxproj" 프로젝트(Build 대상)입니다.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\FmodSound.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt FmodSound.cpp
+         FmodSound.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\zrma\Documents\SVN\NEWBOY\trunk\FmodSound\Debug\FmodSound.exe" /INCREMENTAL /NOLOGO fmodex_vc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\zrma\Documents\SVN\NEWBOY\trunk\FmodSound\Debug\FmodSound.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\zrma\Documents\SVN\NEWBOY\trunk\FmodSound\Debug\FmodSound.lib" /MACHINE:X86 Debug\FmodSound.res
+         Debug\FmodSound.obj
+         Debug\stdafx.obj
+         FmodSound.vcxproj -> C:\Users\zrma\Documents\SVN\NEWBOY\trunk\FmodSound\Debug\FmodSound.exe
+     1>"C:\Users\zrma\Documents\SVN\NEWBOY\trunk\FmodSound\FmodSound\FmodSound.vcxproj" 프로젝트를 빌드했습니다(Build 대상).
+
+빌드했습니다.
+
+경과 시간: 00:00:00.93
