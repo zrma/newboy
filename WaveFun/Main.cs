@@ -22,9 +22,11 @@ namespace WaveFun
 
         private void btnGenerateWave_Click(object sender, EventArgs e)
         {
-            string filePath = @"C:\Users\Dan\Desktop\test2.wav";
+            string filePath = @"Z:\Downloads\Sine.wav";
+            // Output file path setting
+
             WaveGenerator wave = new WaveGenerator(WaveExampleType.ExampleSineWave);
-            wave.Save(filePath);            
+            wave.Save(filePath);
 
             SoundPlayer player = new SoundPlayer(filePath);               
             player.Play();
