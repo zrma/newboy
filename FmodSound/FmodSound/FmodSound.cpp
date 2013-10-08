@@ -356,7 +356,7 @@ void ERRCHECK(FMOD_RESULT result)
 	}
 }
 
-// 테스트용 데모 파일 로딩
+// 팩토리 생성
 void InitSound()
 {
 	FMOD_RESULT result;
@@ -368,7 +368,7 @@ void InitSound()
 	ERRCHECK(result);
 }
 
-// 로딩
+// 리소스 생성 - 재생하고자 하는 음원 로딩
 void LoadSound()
 {
 	FMOD_RESULT result;
@@ -387,7 +387,7 @@ void PLAYsound()
 	ERRCHECK(result);
 }
 
-// 소멸 처리
+// 해제 처리
 void DeleteSound()
 {
 	if(sound)
@@ -403,6 +403,7 @@ void DeleteSound()
 	}
 }
 
+// 창 이동 샘플
 void SetMoveWindow( HWND hWnd, WPARAM wParam )
 {
 	// 윈도우의 위치와 크기(RECT)를 가져온다.
