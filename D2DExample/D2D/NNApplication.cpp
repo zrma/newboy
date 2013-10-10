@@ -13,6 +13,7 @@ NNApplication::NNApplication()
 	  m_PrevTime(0), m_NowTime(0),
 	  m_Renderer(nullptr), m_pSceneDirector(nullptr),
 	  m_RendererStatus(UNKNOWN)
+	  // 초기화 리스트
 {
 
 }
@@ -58,16 +59,19 @@ bool NNApplication::Init( wchar_t* const title, int width, int height, RendererS
 
 	return true;
 }
+// 어플리케이션 초기화 => 렌더러 초기화, 씬디렉터(싱글톤 패턴으로 생성) 초기화
 
 bool NNApplication::Release()
 {
 	SafeDelete( m_Renderer );
 	m_pSceneDirector->Release();
+	// 싱글톤 삭제
 
 	NNSceneDirector::ReleaseInstance();
 	NNResourceManager::ReleaseInstance();
 	NNInputSystem::ReleaseInstance();
 	NNAudioSystem::ReleaseInstance();
+
 	ReleaseInstance();
 
 	return true;
@@ -96,7 +100,7 @@ bool NNApplication::Run()
 			{
 				m_PrevTime = m_NowTime;
 			}
-			m_DeltaTime = static_cast<float>(m_NowTime - m_PrevTime) / 60.f;
+			m_DeltaTime = static_cast<float>(m_NowTime - m_PrevTime) / 1.f;
 			m_PrevTime = m_NowTime;
 			m_Fps = 1.f / m_DeltaTime;
 
@@ -115,6 +119,8 @@ bool NNApplication::Run()
 			{
 				PostQuitMessage(0);
 			}
+			// ESC 키가 눌렸을 경우 프로그램 종료를 처리한다.
+			// 여기서는 생성 된 윈도우에 필요한 자원 반환을 순차적으로 하는 것으로 추측 됨 - 1
 		}
 	}
 
@@ -168,6 +174,18 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 	switch( message )
 	{
 	case WM_DESTROY:
+
+		// 추가 한 부분
+		DestroyWindow(hWnd);
+		// 여기서는 윈도우가 그냥 파괴 되었을 경우 하단의 종료를 처리하는데
+		// 윈도우에 묶여 있는 여러 자원들이 순차적으로 반환 또는 해제 되지 않는 상태에서
+		// 순서에 맞지 않게 반환 되면서 권한이 없는 메모리 공간을 억세스 하려고 해서
+		// 충돌이 난 것으로 생각 됨.
+		//
+		// 그래서 DestroyWindow() 함수를 호출하여 윈도우에 연관 된 리소스들을 먼저 제거 함
+		//
+		// 결과! 종료 후 에러가 사라짐.
+
 		PostQuitMessage(0);
 		return 0;
 	case WM_PAINT:

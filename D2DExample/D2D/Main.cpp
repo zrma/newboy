@@ -20,7 +20,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdP
 	Application->Init( L"D2D Test", 800, 600, D2D );
 
 	// Sprite Example
-	// NNSceneDirector::GetInstance()->ChangeScene( SpriteExample::Create() );
+	NNSceneDirector::GetInstance()->ChangeScene( SpriteExample::Create() );
 
 	// Label Example
 	// NNSceneDirector::GetInstance()->ChangeScene( LabelExample::Create() );
