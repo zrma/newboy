@@ -5,12 +5,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Main">
+    <Filter Include="Core">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Main\Header">
+    <Filter Include="Core\Main">
+      <UniqueIdentifier>{f3fc613f-533f-4aa0-854c-0c427e4aee0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Main\Header">
       <UniqueIdentifier>{196d0d99-6438-4493-a0ac-7ffe743d8a03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Singleton">
+      <UniqueIdentifier>{42ee390b-7534-4d64-b96d-f1d592286cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Singleton\Manager">
+      <UniqueIdentifier>{8bbbc66b-1c3a-4f7a-8c09-9f8260a0ac00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Singleton\Loop">
+      <UniqueIdentifier>{e84446d3-bb4b-4aa9-9867-d22382a511b9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -18,18 +30,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RMResource.h">
-      <Filter>Main\Header</Filter>
+      <Filter>Core\Main\Header</Filter>
     </ClInclude>
     <ClInclude Include="RMInclude.h">
-      <Filter>Main\Header</Filter>
+      <Filter>Core\Main\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RMSingletonLoop.h">
+      <Filter>Singleton\Loop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RMInclude.cpp">
-      <Filter>Main\Header</Filter>
+      <Filter>Core\Main\Header</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>Main</Filter>
+      <Filter>Core\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="RMSingletonLoop.cpp">
+      <Filter>Singleton\Loop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
