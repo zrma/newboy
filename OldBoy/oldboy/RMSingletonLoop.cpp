@@ -1,5 +1,7 @@
 #include "RMInclude.h"
 #include "RMSingletonLoop.h"
+#include <d2d1.h>
+#pragma comment(lib, "d2d1")
 
 #define MAX_LOADSTRING 100
 
@@ -174,18 +176,126 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	PAINTSTRUCT ps;
-	HDC hdc;
+	/*
+	윈도우 기본 그리기
+	HGDIOBJ original = NULL;
+	HPEN blackPen = NULL;
+	*/
+
+	ID2D1Factory* pD2DFactory = nullptr;
+	HRESULT hr = NULL;
+	ID2D1HwndRenderTarget* pRT = NULL;
+	ID2D1SolidColorBrush* pBlackBrush = NULL;
 
 	switch (message)
 	{
 	case WM_PAINT:
-		hdc = BeginPaint(hWnd, &ps);
+
+		hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,&pD2DFactory);
+
+		// Obtain the size of the drawing area.
+		RECT rc;
+		GetClientRect(hWnd, &rc);
+
+		// Create a Direct2D render target						
+		hr = pD2DFactory->CreateHwndRenderTarget(
+				D2D1::RenderTargetProperties(),
+				D2D1::HwndRenderTargetProperties(
+					hWnd,
+					D2D1::SizeU(
+					rc.right - rc.left,
+					rc.bottom - rc.top)
+				),
+				&pRT
+			);
+
+		//ID2D1SolidColorBrush* pBlackBrush = NULL;
+		if (SUCCEEDED(hr))
+		{
+			pRT->CreateSolidColorBrush(
+				D2D1::ColorF(D2D1::ColorF::Aqua),
+				&pBlackBrush
+				); 
+		}
+
+		//그리기 시작
+		pRT->BeginDraw();
+
+		pRT->DrawRectangle(
+			D2D1::RectF(
+			rc.left + 100.0f,
+			rc.top + 100.0f,
+			rc.right - 100.0f,
+			rc.bottom - 100.0f),
+			pBlackBrush);
+
+		hr = pRT->EndDraw();
+
+
+		if(pRT)
+		{
+			pRT->Release();
+			pRT = nullptr;
+		}
+
+		if(pBlackBrush)
+		{
+			pBlackBrush->Release();
+			pBlackBrush = nullptr;
+		}
+
+		if(pD2DFactory)
+		{
+			pD2DFactory->Release();
+			pD2DFactory = nullptr;
+		}
+	
+		/*
+		윈도우 기본 그리기
+
+		BeginPaint(hWnd, &ps);
+
+		// Obtain the size of the drawing area.
+		RECT rc;
+		GetClientRect(hWnd, &rc);			
+
+		// Save the original object
+		//HGDIOBJ original = NULL;
+		original = SelectObject(ps.hdc, GetStockObject(5));
+
+		// Create a pen.            
+		blackPen = CreatePen(PS_SOLID, 1, RGB(255,127,0));
+
+		// Select the pen.
+		SelectObject(ps.hdc, blackPen);
+
+		// Draw a rectangle.
+		Rectangle(
+			ps.hdc, 
+			150, 
+			150, 
+			450, 
+			450);
+		Rectangle(
+			ps.hdc, 
+			100, 
+			100, 
+			500, 
+			500);
+		
+		DeleteObject(blackPen);
+
+		// Restore the original object
+		SelectObject(ps.hdc, original);
+
 		EndPaint(hWnd, &ps);
+		*/
 		break;
+
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
