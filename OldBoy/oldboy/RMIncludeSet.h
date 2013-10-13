@@ -19,6 +19,14 @@
 #include <memory.h>
 #include <tchar.h>
 
+#include <math.h>
+
+#include <d2d1.h>
+#include <d2d1helper.h>
+#include <dwrite.h>
+#include <wincodec.h>
 
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.
-#include <crtdbg.h> //memory leak check header
+
+#include <crtdbg.h> 
+// Memory Leak Check Header

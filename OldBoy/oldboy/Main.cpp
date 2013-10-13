@@ -2,7 +2,7 @@
 // oldboy.cpp : 메인함수가 포함 되어 있는 파일.
 
 
-#include "RMinclude.h"
+#include "RMConfig.h"
 #include "RMSingletonLoop.h"
 
 //define for memroy leak check
@@ -21,7 +21,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	CRMSingletonLoop loop;
 
-	loop.Main(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+	loop.Run(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 
 	return 0;
 }

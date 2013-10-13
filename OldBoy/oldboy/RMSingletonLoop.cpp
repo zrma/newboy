@@ -1,11 +1,9 @@
-#include "RMInclude.h"
+#include "RMConfig.h"
 #include "RMSingletonLoop.h"
 
-// 임시 추가
-#include <d2d1.h>
-#pragma comment(lib, "d2d1")
-
 #define MAX_LOADSTRING 100
+
+CRMSingletonLoop* CRMSingletonLoop::m_pInstance = nullptr;
 
 CRMSingletonLoop::CRMSingletonLoop(void)
 {
@@ -16,16 +14,34 @@ CRMSingletonLoop::~CRMSingletonLoop(void)
 {
 }
 
-static ATOM				MyRegisterClass(HINSTANCE hInstance);
-static BOOL				InitInstance(HINSTANCE, int);
-static LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
+CRMSingletonLoop* CRMSingletonLoop::GetInstance()
+{
+	if(m_pInstance)
+	{
+		return m_pInstance;
+	}
+	else
+	{
+		m_pInstance = new CRMSingletonLoop();
+		return m_pInstance;
+	}
+}
+
+void CRMSingletonLoop::ReleaseInstance()
+{
+	if(m_pInstance)
+	{
+		delete m_pInstance;
+		m_pInstance = NULL;
+	}
+}
 
 // 전역 변수:
 HINSTANCE hInst;								// 현재 인스턴스입니다.
 // TCHAR szTitle[MAX_LOADSTRING];				// 제목 표시줄 텍스트입니다.
 TCHAR szWindowClass[MAX_LOADSTRING];			// 기본 창 클래스 이름입니다.
 
-int CRMSingletonLoop::Main(_In_ HINSTANCE hInstance,
+int CRMSingletonLoop::Run(_In_ HINSTANCE hInstance,
 						_In_opt_ HINSTANCE hPrevInstance,
 						_In_ LPTSTR    lpCmdLine,
 						_In_ int       nCmdShow)
