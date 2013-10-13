@@ -19,7 +19,8 @@
 #endif
 // 다음은 새 개체에 사용할 기본값입니다.
 //
-#ifdef APSTUDIO_INVOKED
+
+#ifdef	APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 
 #define _APS_NO_MFC					130
