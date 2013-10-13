@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "SimpleD2DApp.h"
+#include "DemoApp.h"
 
 #define MAX_LOADSTRING 100
 
@@ -22,40 +23,23 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPTSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
+	HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
 
- 	// TODO: 여기에 코드를 입력합니다.
-	MSG msg;
-	HACCEL hAccelTable;
-
-	// 전역 문자열을 초기화합니다.
-	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-	LoadString(hInstance, IDC_SIMPLED2DAPP, szWindowClass, MAX_LOADSTRING);
-	MyRegisterClass(hInstance);
-
-	// 응용 프로그램 초기화를 수행합니다.
-	if (!InitInstance (hInstance, nCmdShow))
+	if (SUCCEEDED(CoInitialize(NULL)))
 	{
-		return FALSE;
-	}
-
-	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SIMPLED2DAPP));
-
-	// 기본 메시지 루프입니다.
-	while (GetMessage(&msg, NULL, 0, 0))
-	{
-		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
 		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+			CDemoApp app;
+
+			if (SUCCEEDED(app.Initialize()))
+			{
+				app.RunMessageLoop();
+			}
 		}
+		CoUninitialize();
 	}
 
-	return (int) msg.wParam;
+	return 0;
 }
-
-
 
 //
 //  함수: MyRegisterClass()
@@ -125,28 +109,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	int wmId, wmEvent;
 	PAINTSTRUCT ps;
 	HDC hdc;
 
 	switch (message)
 	{
-	case WM_COMMAND:
-		wmId    = LOWORD(wParam);
-		wmEvent = HIWORD(wParam);
-		// 메뉴 선택을 구문 분석합니다.
-		switch (wmId)
-		{
-		case IDM_ABOUT:
-			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-			break;
-		case IDM_EXIT:
-			DestroyWindow(hWnd);
-			break;
-		default:
-			return DefWindowProc(hWnd, message, wParam, lParam);
-		}
-		break;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
 		// TODO: 여기에 그리기 코드를 추가합니다.
@@ -159,24 +126,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	return 0;
-}
-
-// 정보 대화 상자의 메시지 처리기입니다.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	UNREFERENCED_PARAMETER(lParam);
-	switch (message)
-	{
-	case WM_INITDIALOG:
-		return (INT_PTR)TRUE;
-
-	case WM_COMMAND:
-		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-		{
-			EndDialog(hDlg, LOWORD(wParam));
-			return (INT_PTR)TRUE;
-		}
-		break;
-	}
-	return (INT_PTR)FALSE;
 }

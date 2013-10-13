@@ -30,12 +30,18 @@
     <ClInclude Include="SimpleD2DApp.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="DemoApp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="SimpleD2DApp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DemoApp.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
