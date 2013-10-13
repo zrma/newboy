@@ -1,10 +1,11 @@
 #include "RMInclude.h"
 #include "RMSingletonLoop.h"
+
+// 임시 추가
 #include <d2d1.h>
 #pragma comment(lib, "d2d1")
 
 #define MAX_LOADSTRING 100
-
 
 CRMSingletonLoop::CRMSingletonLoop(void)
 {
@@ -177,48 +178,59 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	/*
-	윈도우 기본 그리기
-	HGDIOBJ original = NULL;
-	HPEN blackPen = NULL;
+		테스트 코드 임시 추가
 	*/
-
+	// Step 1
 	ID2D1Factory* pD2DFactory = nullptr;
 	HRESULT hr = NULL;
-	ID2D1HwndRenderTarget* pRT = NULL;
-	ID2D1SolidColorBrush* pBlackBrush = NULL;
+	// 리턴 결과 = TRUE / FALSE
+
+	// Step 2
+	RECT rc;
+	ZeroMemory(&rc, sizeof(rc));
+	ID2D1HwndRenderTarget* pRT = nullptr;
+
+	// Step 3
+	ID2D1SolidColorBrush* pBlackBrush = nullptr;
 
 	switch (message)
 	{
 	case WM_PAINT:
+		
+		hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &pD2DFactory);
 
-		hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,&pD2DFactory);
+//		MessageBoxA(hWnd, "Thing!!!", NULL, message);
+// 		if (FAILED(hr))
+// 		{
+// 			// 방어 코드 추가
+// 			return FALSE;
+// 		}
 
-		// Obtain the size of the drawing area.
-		RECT rc;
-		GetClientRect(hWnd, &rc);
-
-		// Create a Direct2D render target						
+		GetClientRect(hWnd, &rc);;
 		hr = pD2DFactory->CreateHwndRenderTarget(
-				D2D1::RenderTargetProperties(),
-				D2D1::HwndRenderTargetProperties(
-					hWnd,
-					D2D1::SizeU(
-					rc.right - rc.left,
-					rc.bottom - rc.top)
-				),
-				&pRT
-			);
+					D2D1::RenderTargetProperties(),
+					D2D1::HwndRenderTargetProperties(hWnd, D2D1::SizeU(rc.right - rc.left, rc.bottom - rc.top)),
+					&pRT
+					);
+// 		if (FAILED(hr))
+// 		{
+// 			// 방어 코드 추가
+// 			return FALSE;
+// 		}
 
-		//ID2D1SolidColorBrush* pBlackBrush = NULL;
-		if (SUCCEEDED(hr))
-		{
-			pRT->CreateSolidColorBrush(
-				D2D1::ColorF(D2D1::ColorF::Aqua),
-				&pBlackBrush
-				); 
-		}
+		pRT->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::Red),
+			&pBlackBrush
+			); 
 
-		//그리기 시작
+// 		if (SUCCEEDED(hr))
+// 		{
+// 			pRT->CreateSolidColorBrush(
+// 				D2D1::ColorF(D2D1::ColorF::Red),
+// 				&pBlackBrush
+// 				); 
+// 		}
+
 		pRT->BeginDraw();
 
 		pRT->DrawRectangle(
@@ -230,8 +242,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			pBlackBrush);
 
 		hr = pRT->EndDraw();
-
-
+// 		if (FAILED(hr))
+// 		{
+// 			// 방어 코드 추가
+// 			return FALSE;
+// 		}
+		
+		// SafeRelease(pRT);
+		// SafeRelease(pBlackBrush);
+		// SafeRelease(pD2DFactory);
+		
 		if(pRT)
 		{
 			pRT->Release();
@@ -243,59 +263,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			pBlackBrush->Release();
 			pBlackBrush = nullptr;
 		}
-
+		
 		if(pD2DFactory)
 		{
 			pD2DFactory->Release();
 			pD2DFactory = nullptr;
 		}
-	
-		/*
-		윈도우 기본 그리기
-
-		BeginPaint(hWnd, &ps);
-
-		// Obtain the size of the drawing area.
-		RECT rc;
-		GetClientRect(hWnd, &rc);			
-
-		// Save the original object
-		//HGDIOBJ original = NULL;
-		original = SelectObject(ps.hdc, GetStockObject(5));
-
-		// Create a pen.            
-		blackPen = CreatePen(PS_SOLID, 1, RGB(255,127,0));
-
-		// Select the pen.
-		SelectObject(ps.hdc, blackPen);
-
-		// Draw a rectangle.
-		Rectangle(
-			ps.hdc, 
-			150, 
-			150, 
-			450, 
-			450);
-		Rectangle(
-			ps.hdc, 
-			100, 
-			100, 
-			500, 
-			500);
 		
-		DeleteObject(blackPen);
-
-		// Restore the original object
-		SelectObject(ps.hdc, original);
-
-		EndPaint(hWnd, &ps);
-		*/
 		break;
-
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
-
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
