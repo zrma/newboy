@@ -307,6 +307,6 @@ void CDemoApp::OnResize(UINT width, UINT height)
 		// Note: This method can fail, but it's okay to ignore the
 		// error here, because the error will be returned again
 		// the next time EndDraw is called.
-		// m_pRenderTarget->Resize(D2D1::SizeU(width, height));
+		m_pRenderTarget->Resize(D2D1::SizeU(width, height));
 	}
 }
