@@ -3,7 +3,7 @@
 
 
 #include "RMConfig.h"
-#include "RMSingletonLoop.h"
+#include "RMMainLoop.h"
 
 //define for memroy leak check
 #ifdef _DEBUG
@@ -19,9 +19,17 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	CRMSingletonLoop loop;
+	HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
 
-	loop.Run(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+	if(SUCCEEDED(CoInitialize(NULL)))
+	{
+		if(SUCCEEDED(CRMMainLoop::GetInstance()->Initialize()))
+		{
+			CRMMainLoop::GetInstance()->RunMessageLoop();
+			CRMMainLoop::ReleaseInstance();
+		}
+		CoUninitialize();
+	}
 
 	return 0;
 }

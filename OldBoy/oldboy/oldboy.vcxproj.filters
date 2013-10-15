@@ -32,9 +32,6 @@
     <ClInclude Include="RMResource.h">
       <Filter>Core\Main\Header</Filter>
     </ClInclude>
-    <ClInclude Include="RMSingletonLoop.h">
-      <Filter>Singleton\Loop</Filter>
-    </ClInclude>
     <ClInclude Include="RMMacroSet.h">
       <Filter>Core\Main\Header</Filter>
     </ClInclude>
@@ -47,16 +44,22 @@
     <ClInclude Include="RMLibSet.h">
       <Filter>Core\Main\Header</Filter>
     </ClInclude>
+    <ClInclude Include="RMMainLoop.h">
+      <Filter>Singleton\Loop</Filter>
+    </ClInclude>
+    <ClInclude Include="RMDefine.h">
+      <Filter>Core\Main\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Core\Main</Filter>
     </ClCompile>
-    <ClCompile Include="RMSingletonLoop.cpp">
-      <Filter>Singleton\Loop</Filter>
-    </ClCompile>
     <ClCompile Include="RMConfig.cpp">
       <Filter>Core\Main\Header</Filter>
+    </ClCompile>
+    <ClCompile Include="RMMainLoop.cpp">
+      <Filter>Singleton\Loop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

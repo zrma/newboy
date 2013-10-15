@@ -82,9 +82,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RMConfig.h" />
+    <ClInclude Include="RMDefine.h" />
     <ClInclude Include="RMLibSet.h" />
     <ClInclude Include="RMMacroSet.h" />
-    <ClInclude Include="RMSingletonLoop.h" />
+    <ClInclude Include="RMMainLoop.h" />
     <ClInclude Include="RMResource.h" />
     <ClInclude Include="RMIncludeSet.h" />
   </ItemGroup>
@@ -94,7 +95,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="RMSingletonLoop.cpp" />
+    <ClCompile Include="RMMainLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="oldboy.rc" />

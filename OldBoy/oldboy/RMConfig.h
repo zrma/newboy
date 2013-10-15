@@ -1,5 +1,8 @@
 #pragma once
 
+#include "RMDefine.h"
+// ifndef 체크 후 define
+
 #include "RMIncludeSet.h"
 // Include 파일 모음
 
