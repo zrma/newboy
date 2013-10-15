@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "DemoApp.h"
 
+CDemoApp* CDemoApp::m_pInstance = nullptr;
 
 CDemoApp::CDemoApp(void) :
-	m_hwnd(NULL),
-	m_pDirect2dFactory(NULL),
-	m_pRenderTarget(NULL),
-	m_pLightSlateGrayBrush(NULL),
-	m_pCornflowerBlueBrush(NULL)
+	m_hwnd(nullptr),
+	m_pDirect2dFactory(nullptr),
+	m_pRenderTarget(nullptr),
+	m_pLightSlateGrayBrush(nullptr),
+	m_pCornflowerBlueBrush(nullptr)
 {
 }
 
@@ -58,16 +59,21 @@ HRESULT CDemoApp::Initialize()
 		m_hwnd = CreateWindow(
 			L"D2DDemoApp",
 			L"Direct2D Demo App",
-			WS_OVERLAPPEDWINDOW,
+			// WS_OVERLAPPEDWINDOW, & WS_THICKFRAME 
+			WS_OVERLAPPEDWINDOW & WS_MAXIMIZEBOX & WS_MINIMIZEBOX,
+			// WS_THICKFRAME은 리사이징을 금지하는 플래그이다. 비트연산자 &로 WS_OVERLAPPEDWINDOW와 함께 적용
 			CW_USEDEFAULT,
+			// 0,
 			CW_USEDEFAULT,
-			static_cast<UINT>(ceil(640.f * dpiX / 96.f)),
-			static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
+			// 0,
+			static_cast<UINT>(ceil(960.f * dpiX / 96.f)),
+			static_cast<UINT>(ceil(600.f * dpiY / 96.f)),
 			NULL,
 			NULL,
 			HINST_THISCOMPONENT,
 			this
 			);
+
 		hr = m_hwnd ? S_OK : E_FAIL;
 		if (SUCCEEDED(hr))
 		{
@@ -165,6 +171,10 @@ LRESULT CALLBACK CDemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
 			PtrToUlong(pDemoApp)
 			);
 
+		ShowWindow(hwnd, SW_SHOWNOACTIVATE);
+		ShowWindow(hwnd, SW_SHOWMINNOACTIVE);
+		ShowWindow(hwnd, SHOW_OPENNOACTIVATE);
+		
 		result = 1;
 	}
 	else
@@ -308,5 +318,27 @@ void CDemoApp::OnResize(UINT width, UINT height)
 		// error here, because the error will be returned again
 		// the next time EndDraw is called.
 		m_pRenderTarget->Resize(D2D1::SizeU(width, height));
+	}
+}
+
+CDemoApp* CDemoApp::GetInstance()
+{
+	if(m_pInstance)
+	{
+		return m_pInstance;
+	}
+	else
+	{
+		m_pInstance = new CDemoApp();
+		return m_pInstance;
+	}
+}
+
+void CDemoApp::ReleaseInstance()
+{
+	if(m_pInstance)
+	{
+		delete m_pInstance;
+		m_pInstance = NULL;
 	}
 }

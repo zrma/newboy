@@ -11,6 +11,13 @@ public:
 	// Process and dispatch messages
 	void RunMessageLoop();
 
+public:
+	static CDemoApp*	GetInstance();
+	static void			ReleaseInstance();
+
+private:
+	static CDemoApp*	m_pInstance;
+
 private:
 	// Initialize device-independent resources.
 	HRESULT CreateDeviceIndependentResources();

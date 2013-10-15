@@ -14,13 +14,10 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	if (SUCCEEDED(CoInitialize(NULL)))
 	{
+		if(SUCCEEDED(CDemoApp::GetInstance()->Initialize()))
 		{
-			CDemoApp app;
-
-			if (SUCCEEDED(app.Initialize()))
-			{
-				app.RunMessageLoop();
-			}
+			CDemoApp::GetInstance()->RunMessageLoop();
+			CDemoApp::ReleaseInstance();
 		}
 		CoUninitialize();
 	}
