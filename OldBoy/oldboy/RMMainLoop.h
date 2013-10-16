@@ -1,4 +1,6 @@
 #pragma once
+#include "RMRender.h"
+
 class CRMMainLoop
 {
 public:
@@ -17,18 +19,11 @@ private:
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	
 private:
-	// 여기부터
-// 	HRESULT		CreateDeviceIndependentResources();
-// 	HRESULT		CreateDeviceResources();
-// 	void		DiscardDeviceResources();
-// 	HRESULT		OnRender();
-	// 여기까지는 랜더링 클래스로 새로 뽑아내야 됨
+	HWND m_HWnd;
 
 private:
-	HWND m_hWnd;
-// 	ID2D1Factory* m_pDirect2dFactory;
-// 	ID2D1HwndRenderTarget* m_pRenderTarget;
-// 	ID2D1SolidColorBrush* m_pLightSlateGrayBrush;
-// 	ID2D1SolidColorBrush* m_pCornflowerBlueBrush;
-	// 여기도 랜더링 클래스로 새로 뽑을 곳
+	CRMRender* m_Render;
+
+public:
+	inline HWND GetHWND() const { return m_HWnd; }
 };

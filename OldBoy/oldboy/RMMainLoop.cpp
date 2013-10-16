@@ -4,19 +4,16 @@
 CRMMainLoop* CRMMainLoop::m_pInstance = nullptr;
 
 CRMMainLoop::CRMMainLoop(void):
-	m_hWnd(nullptr)
+	m_HWnd(nullptr),
+	m_Render(nullptr)
 {
+	m_Render = new CRMRender();
 }
 
 
 CRMMainLoop::~CRMMainLoop(void)
 {
-// 	SafeRelease(&m_pDirect2dFactory);
-// 	SafeRelease(&m_pRenderTarget);
-// 	SafeRelease(&m_pLightSlateGrayBrush);
-// 	SafeRelease(&m_pCornflowerBlueBrush);
-	
-	// 메인 루프는 멤버 변수로 랜더러를 들고 있고, 여기서 랜더러를 해제 하도록 한다
+	SafeRelease(&m_Render);
 }
 
 CRMMainLoop* CRMMainLoop::GetInstance()
@@ -46,8 +43,7 @@ HRESULT CRMMainLoop::Initialize()
 	HRESULT hr;
 
 	// 렌더링 객체 추가
-	// hr = CreateDeviceIndependentResources(); // 이 부분 수정
-	hr = S_OK; // 렌더링 구현이 안 되어 있으므로 임시로 OK 사인을 넣음
+	hr = m_Render->CreateFactory();
 
 	if (SUCCEEDED(hr))
 	{
@@ -69,7 +65,7 @@ HRESULT CRMMainLoop::Initialize()
 		// m_pDirect2dFactory->GetDesktopDpi(&dpiX, &dpiY);
 
 		// Create the window.
-		m_hWnd = CreateWindow(
+		m_HWnd = CreateWindow(
 			L"RhythmMatch",
 			L"Rhythm Match v1.0",
 			// WS_OVERLAPPEDWINDOW, & WS_THICKFRAME 
@@ -85,11 +81,11 @@ HRESULT CRMMainLoop::Initialize()
 			this
 			);
 
-		hr = m_hWnd ? S_OK : E_FAIL;
+		hr = m_HWnd ? S_OK : E_FAIL;
 		if (SUCCEEDED(hr))
 		{
-			ShowWindow(m_hWnd, SW_SHOWNORMAL);
-			UpdateWindow(m_hWnd);
+			ShowWindow(m_HWnd, SW_SHOWNORMAL);
+			UpdateWindow(m_HWnd);
 		}
 	}
 
@@ -107,71 +103,6 @@ void CRMMainLoop::RunMessageLoop()
 		DispatchMessage(&msg);
 	}
 }
-
-// HRESULT CRMMainLoop::CreateDeviceIndependentResources()
-// {
-// 	HRESULT hr = S_OK;
-// 
-// 	// Create a Direct2D factory.
-// 	hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_pDirect2dFactory);
-// 
-// 	return hr;
-// }
-
-// HRESULT CRMMainLoop::CreateDeviceResources()
-// {
-// 	HRESULT hr = S_OK;
-// 
-// 	if (!m_pRenderTarget)
-// 	{
-// 		RECT rc;
-// 		GetClientRect(m_hWnd, &rc);
-// 
-// 		D2D1_SIZE_U size = D2D1::SizeU(
-// 			rc.right - rc.left,
-// 			rc.bottom - rc.top
-// 			);
-// 
-// 		// Create a Direct2D render target.
-// 		hr = m_pDirect2dFactory->CreateHwndRenderTarget(
-// 			D2D1::RenderTargetProperties(),
-// 			D2D1::HwndRenderTargetProperties(m_hWnd, size),
-// 			&m_pRenderTarget
-// 			);
-// 
-// 
-// 		if (SUCCEEDED(hr))
-// 		{
-// 			// Create a gray brush.
-// 			hr = m_pRenderTarget->CreateSolidColorBrush(
-// 				D2D1::ColorF(D2D1::ColorF::LightSlateGray),
-// 				&m_pLightSlateGrayBrush
-// 				);
-// 		}
-// 		if (SUCCEEDED(hr))
-// 		{
-// 			// Create a blue brush.
-// 			hr = m_pRenderTarget->CreateSolidColorBrush(
-// 				D2D1::ColorF(D2D1::ColorF::CornflowerBlue),
-// 				&m_pCornflowerBlueBrush
-// 				);
-// 		}
-// 	}
-// 
-// 	return hr;
-// }
-
-// void CRMMainLoop::DiscardDeviceResources()
-// {
-// 	SafeRelease(&m_pRenderTarget);
-// 	SafeRelease(&m_pLightSlateGrayBrush);
-// 	SafeRelease(&m_pCornflowerBlueBrush);
-// }
-
-// 위의 주석 처리 한 세 부분을 렌더링 클래스로 옮겨야 됨
-// 팩토리 생성 + 리소스 생성 + 자원 반납
-// 랜더러의 Initialize 메소드
-
 
 LRESULT CALLBACK CRMMainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -210,7 +141,7 @@ LRESULT CALLBACK CRMMainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LP
 
 			case WM_PAINT:
 				{
-					// pRMMainLoop->OnRender();
+					pRMMainLoop->m_Render->Render();
 					ValidateRect(hWnd, NULL);
 				}
 				result = 0;
@@ -235,78 +166,3 @@ LRESULT CALLBACK CRMMainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LP
 
 	return result;
 }
-
-// HRESULT CRMMainLoop::OnRender()
-// {
-// 	HRESULT hr = S_OK;
-// 
-// 	hr = CreateDeviceResources();
-// 
-// 	if (SUCCEEDED(hr))
-// 	{
-// 		m_pRenderTarget->BeginDraw();
-// 
-// 		m_pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
-// 
-// 		m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
-// 
-// 		D2D1_SIZE_F rtSize = m_pRenderTarget->GetSize();
-// 
-// 		// Draw a grid background.
-// 		int width = static_cast<int>(rtSize.width);
-// 		int height = static_cast<int>(rtSize.height);
-// 
-// 		for (int x = 0; x < width; x += 10)
-// 		{
-// 			m_pRenderTarget->DrawLine(
-// 				D2D1::Point2F(static_cast<FLOAT>(x), 0.0f),
-// 				D2D1::Point2F(static_cast<FLOAT>(x), rtSize.height),
-// 				m_pLightSlateGrayBrush,
-// 				0.5f
-// 				);
-// 		}
-// 
-// 		for (int y = 0; y < height; y += 10)
-// 		{
-// 			m_pRenderTarget->DrawLine(
-// 				D2D1::Point2F(0.0f, static_cast<FLOAT>(y)),
-// 				D2D1::Point2F(rtSize.width, static_cast<FLOAT>(y)),
-// 				m_pLightSlateGrayBrush,
-// 				0.5f
-// 				);
-// 		}
-// 
-// 		// Draw two rectangles.
-// 		D2D1_RECT_F rectangle1 = D2D1::RectF(
-// 			rtSize.width/2 - 50.0f,
-// 			rtSize.height/2 - 50.0f,
-// 			rtSize.width/2 + 50.0f,
-// 			rtSize.height/2 + 50.0f
-// 			);
-// 
-// 		D2D1_RECT_F rectangle2 = D2D1::RectF(
-// 			rtSize.width/2 - 100.0f,
-// 			rtSize.height/2 - 100.0f,
-// 			rtSize.width/2 + 100.0f,
-// 			rtSize.height/2 + 100.0f
-// 			);
-// 
-// 		// Draw a filled rectangle.
-// 		m_pRenderTarget->FillRectangle(&rectangle1, m_pLightSlateGrayBrush);
-// 
-// 		// Draw the outline of a rectangle.
-// 		m_pRenderTarget->DrawRectangle(&rectangle2, m_pCornflowerBlueBrush);
-// 
-// 		hr = m_pRenderTarget->EndDraw();
-// 	}
-// 
-// 	if (hr == D2DERR_RECREATE_TARGET)
-// 	{
-// 		hr = S_OK;
-// 		DiscardDeviceResources();
-// 	}
-// 
-// 	return hr;
-// }
-
-// 이것이 실제적으로 랜더러의 랜더 메소드

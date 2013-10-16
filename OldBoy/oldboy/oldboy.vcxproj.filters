@@ -24,6 +24,9 @@
     <Filter Include="Singleton\Loop">
       <UniqueIdentifier>{e84446d3-bb4b-4aa9-9867-d22382a511b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Singleton\Render">
+      <UniqueIdentifier>{44c08bbe-4ae9-46b4-a215-e86bb0aa7283}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -50,6 +53,9 @@
     <ClInclude Include="RMDefine.h">
       <Filter>Core\Main\Header</Filter>
     </ClInclude>
+    <ClInclude Include="RMRender.h">
+      <Filter>Singleton\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -60,6 +66,9 @@
     </ClCompile>
     <ClCompile Include="RMMainLoop.cpp">
       <Filter>Singleton\Loop</Filter>
+    </ClCompile>
+    <ClCompile Include="RMRender.cpp">
+      <Filter>Singleton\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
