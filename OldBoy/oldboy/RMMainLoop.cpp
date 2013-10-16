@@ -62,6 +62,9 @@ HRESULT CRMMainLoop::Initialize()
 		RegisterClassEx(&wcex);
 
 		// 사이즈 계산 하기 위한 부분
+
+		float dpiX = 0, dpiY = 0;
+		m_Render->GetDesktopDpi(&dpiX, &dpiY);
 		// m_pDirect2dFactory->GetDesktopDpi(&dpiX, &dpiY);
 
 		// Create the window.
@@ -72,9 +75,9 @@ HRESULT CRMMainLoop::Initialize()
 			WS_OVERLAPPEDWINDOW & WS_MAXIMIZEBOX & WS_MINIMIZEBOX,
 			// WS_THICKFRAME은 리사이징을 금지하는 플래그이다. 비트연산자 &로 WS_OVERLAPPEDWINDOW와 함께 적용
 			// CW_USEDEFAULT, CW_USEDEFAULT,
-			50, 50, 900, 600,
-			// static_cast<UINT>(ceil(960.f * dpiX / 96.f)),
-			// static_cast<UINT>(ceil(600.f * dpiY / 96.f)), // 이 수식으로 화면 dpi 대비 일정 사이즈를 얻을 수 있음
+			50, 50, 
+			static_cast<UINT>(ceil(1152.f * dpiX / 94.f)),
+			static_cast<UINT>(ceil(648.f * dpiY / 94.f)), // 이 수식으로 화면 dpi 대비 일정 사이즈를 얻을 수 있음
 			NULL,
 			NULL,
 			HINST_THISCOMPONENT,
@@ -110,24 +113,17 @@ LRESULT CALLBACK CRMMainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LP
 
 	if (message == WM_CREATE)
 	{
-		LPCREATESTRUCT pcs = (LPCREATESTRUCT)lParam;
-		CRMMainLoop *pRMMainLoop = (CRMMainLoop *)pcs->lpCreateParams;
-
-		::SetWindowLongPtrW(hWnd, GWLP_USERDATA, PtrToUlong(pRMMainLoop));
-
-		ShowWindow(hWnd, SW_SHOWNOACTIVATE);
-		ShowWindow(hWnd, SW_SHOWMINNOACTIVE);
-		ShowWindow(hWnd, SHOW_OPENNOACTIVATE);
+ 		ShowWindow(hWnd, SW_SHOWNOACTIVATE);
+ 		ShowWindow(hWnd, SW_SHOWMINNOACTIVE);
+ 		ShowWindow(hWnd, SHOW_OPENNOACTIVATE);
 
 		result = 1;
 	}
 	else
 	{
-		CRMMainLoop *pRMMainLoop = reinterpret_cast<CRMMainLoop *>(static_cast<LONG_PTR>(::GetWindowLongPtrW(hWnd, GWLP_USERDATA)));
-
 		bool wasHandled = false;
 
-		if (pRMMainLoop)
+		if (CRMMainLoop::GetInstance()->m_Render)
 		{
 			switch (message)
 			{
@@ -141,7 +137,7 @@ LRESULT CALLBACK CRMMainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LP
 
 			case WM_PAINT:
 				{
-					pRMMainLoop->m_Render->Render();
+					CRMMainLoop::GetInstance()->m_Render->Render();
 					ValidateRect(hWnd, NULL);
 				}
 				result = 0;

@@ -148,3 +148,8 @@ HRESULT CRMRender::Render()
 
 	return hr;
 }
+
+void CRMRender::GetDesktopDpi( float* dpiX, float* dpiY )
+{
+	m_pDirect2dFactory->GetDesktopDpi(dpiX, dpiY);
+}

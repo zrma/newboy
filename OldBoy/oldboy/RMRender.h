@@ -10,6 +10,7 @@ public:
 	HRESULT		CreateResource();
 	HRESULT		Render();
 	void		Release();
+	void		GetDesktopDpi(float* dpiX, float* dpiY);
 
 private:
 	ID2D1Factory*			m_pDirect2dFactory;
