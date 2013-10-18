@@ -22,7 +22,14 @@ private:
 	HWND m_HWnd;
 
 private:
-	CRMRender* m_Render;
+	CRMRender*	m_Render;
+
+private:
+	int		m_Fps;
+	int		m_ElapsedTime;
+	
+	int		m_PrevTime;
+	int		m_NowTime;
 
 public:
 	inline HWND GetHWND() const { return m_HWnd; }

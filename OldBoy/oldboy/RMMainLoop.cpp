@@ -5,9 +5,10 @@ CRMMainLoop* CRMMainLoop::m_pInstance = nullptr;
 
 CRMMainLoop::CRMMainLoop(void):
 	m_HWnd(nullptr),
-	m_Render(nullptr)
+	m_Fps(0), m_ElapsedTime(0), m_PrevTime(0), m_NowTime(0)
 {
-	m_Render = new CRMRender();
+	m_Render	= new CRMRender();
+	m_Fps		= 1000/60;
 }
 
 
@@ -99,11 +100,37 @@ void CRMMainLoop::RunMessageLoop()
 {
 	MSG msg;
 
-	// 기본 메시지 루프입니다.
-	while (GetMessage(&msg, NULL, 0, 0))
+	while(true)
 	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else
+		{
+			CRMMainLoop::GetInstance()->m_Render->MovePosition();
+
+			m_NowTime = timeGetTime();
+
+			if ( m_PrevTime == 0.f )
+			{
+				m_PrevTime = m_NowTime;
+			}
+
+			m_ElapsedTime = m_NowTime - m_PrevTime;
+			
+			if(m_ElapsedTime % m_Fps == 0)
+			{
+				CRMMainLoop::GetInstance()->m_Render->Render();
+				ValidateRect(m_HWnd, NULL);
+
+				m_PrevTime = m_NowTime;
+			}
+			
+			if(m_ElapsedTime > m_Fps)
+				m_PrevTime = m_NowTime;
+		}
 	}
 }
 
@@ -127,23 +154,6 @@ LRESULT CALLBACK CRMMainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LP
 		{
 			switch (message)
 			{
-			case WM_DISPLAYCHANGE:
-				{
-					InvalidateRect(hWnd, NULL, FALSE);
-				}
-				result = 0;
-				wasHandled = true;
-				break;
-
-			case WM_PAINT:
-				{
-					CRMMainLoop::GetInstance()->m_Render->Render();
-					ValidateRect(hWnd, NULL);
-				}
-				result = 0;
-				wasHandled = true;
-				break;
-
 			case WM_DESTROY:
 				{
 					PostQuitMessage(0);
