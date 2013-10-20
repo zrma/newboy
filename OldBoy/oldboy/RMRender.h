@@ -17,6 +17,11 @@ private:
 	ID2D1HwndRenderTarget*	m_pRenderTarget;
 	ID2D1SolidColorBrush*	m_pLightSlateGrayBrush;
 	ID2D1SolidColorBrush*	m_pCornflowerBlueBrush;
+	
+	ID2D1RadialGradientBrush* m_pRadialGradientBrush;
+	ID2D1GradientStopCollection* m_pGradientStops;
+	D2D1_GRADIENT_STOP m_gradientStops[2];
+	D2D1_ELLIPSE m_ellipse;
 
 public:
 	void	MovePosition();
