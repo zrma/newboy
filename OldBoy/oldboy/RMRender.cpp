@@ -68,31 +68,6 @@ HRESULT CRMRender::CreateResource()
 				&m_pCornflowerBlueBrush
 				);
 		}
-
-
-		// Create gradient Guide line
-		m_gradientStops[0].color = D2D1::ColorF(D2D1::ColorF::ForestGreen,1);
-		m_gradientStops[0].position = 0.0f;
-		m_gradientStops[1].color = D2D1::ColorF(D2D1::ColorF::DeepPink,1);
-		m_gradientStops[1].position = 1.0f;
-
-		if (SUCCEEDED(hr))
-		{
-			
-			hr = m_pRenderTarget->CreateGradientStopCollection(m_gradientStops,2,D2D1_GAMMA_2_2, D2D1_EXTEND_MODE_CLAMP, &m_pGradientStops);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			//Create radial gradient brush
-			hr = m_pRenderTarget->CreateRadialGradientBrush(
-				D2D1::RadialGradientBrushProperties(D2D1::Point2F(150,150),D2D1::Point2F(25,25),150,150),
-				m_pGradientStops, 
-				&m_pRadialGradientBrush
-				);
-		}
-
-
 	}
 
 	return hr;
@@ -117,8 +92,7 @@ HRESULT CRMRender::Render()
 
 		m_pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
-		//fill the whole background
-		m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::Yellow));
+		m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
 
 		D2D1_SIZE_F rtSize = m_pRenderTarget->GetSize();
 
@@ -139,22 +113,6 @@ HRESULT CRMRender::Render()
 				m_pLightSlateGrayBrush,
 				0.5f
 				);
-
-		//radial Gradient brush test
-		m_pRenderTarget->DrawLine(
-			D2D1::Point2F(0, 0),
-			D2D1::Point2F(500.0f, 500.0f),
-			m_pRadialGradientBrush,
-			0.5f
-			);
-
-		//radial ellipse
-		m_ellipse.point = D2D1::Point2F(400,400);
-		m_ellipse.radiusX = 75;
-		m_ellipse.radiusY = 75;
-
-		m_pRenderTarget->FillEllipse(m_ellipse,m_pRadialGradientBrush);
-
 
 		hr = m_pRenderTarget->EndDraw();
 	}
