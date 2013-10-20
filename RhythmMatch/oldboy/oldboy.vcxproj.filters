@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{f3fc613f-533f-4aa0-854c-0c427e4aee0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Header">
+      <UniqueIdentifier>{196d0d99-6438-4493-a0ac-7ffe743d8a03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{42ee390b-7534-4d64-b96d-f1d592286cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Manager">
+      <UniqueIdentifier>{8bbbc66b-1c3a-4f7a-8c09-9f8260a0ac00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Loop">
+      <UniqueIdentifier>{e84446d3-bb4b-4aa9-9867-d22382a511b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Render">
+      <UniqueIdentifier>{44c08bbe-4ae9-46b4-a215-e86bb0aa7283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Object">
+      <UniqueIdentifier>{f41b8739-1848-4e91-b5b6-9f05dc918b92}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RMResource.h">
+      <Filter>Main\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RMMacroSet.h">
+      <Filter>Main\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RMConfig.h">
+      <Filter>Main\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RMIncludeSet.h">
+      <Filter>Main\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RMLibSet.h">
+      <Filter>Main\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RMMainLoop.h">
+      <Filter>Core\Loop</Filter>
+    </ClInclude>
+    <ClInclude Include="RMDefine.h">
+      <Filter>Main\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RMRender.h">
+      <Filter>Core\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RMTextureManager.h">
+      <Filter>Core\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="RMTexture.h">
+      <Filter>Core\Object</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="RMConfig.cpp">
+      <Filter>Main\Header</Filter>
+    </ClCompile>
+    <ClCompile Include="RMMainLoop.cpp">
+      <Filter>Core\Loop</Filter>
+    </ClCompile>
+    <ClCompile Include="RMRender.cpp">
+      <Filter>Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="RMTextureManager.cpp">
+      <Filter>Core\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="RMTexture.cpp">
+      <Filter>Core\Object</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="oldboy.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="oldboy.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
