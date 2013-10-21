@@ -164,7 +164,7 @@
   <Class Name="SpriteExample" Collapsed="true">
     <Position X="8" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAIAAAAAAAAAAAAAAAAgAAAAAAAAIBAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAYAAAAAAAAAAAAAAAAgAAAAAAAAIBAAAAAAAAA=</HashCode>
       <FileName>SpriteExample.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -182,5 +182,5 @@
       <FileName>NNInputSystem.h</FileName>
     </TypeIdentifier>
   </Enum>
-  <Font Name="나눔고딕코딩" Size="9" />
+  <Font Name="맑은 고딕" Size="9" />
 </ClassDiagram>

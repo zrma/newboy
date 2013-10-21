@@ -5,6 +5,7 @@
 #include "NND2DRenderer.h"
 #include "NNSceneDirector.h"
 #include "NNConfig.h"
+//다른 기능의 매니저 역할하는 헤더 파일들
 
 /* */
 /* NNApplication

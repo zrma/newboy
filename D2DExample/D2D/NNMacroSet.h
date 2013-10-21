@@ -1,6 +1,8 @@
 
 #pragma once
 
+
+//오버로드, 모든 자료형에 상관없이 
 template <typename T>
 inline void SafeDelete( T* &p )
 {
@@ -51,6 +53,7 @@ inline double NNRadianToDegree( double n )
 	return n * 180 / NN_PI;
 }
 
+// 클래스 생성
 #define NNCREATE_FUNC(CLASS_NAME) \
 	static CLASS_NAME* Create() \
 	{ \

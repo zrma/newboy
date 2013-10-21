@@ -67,8 +67,8 @@ NND2DTexture::NND2DTexture( std::wstring path )
 }
 NND2DTexture::~NND2DTexture()
 {
-	Destroy();
-	SafeRelease( g_pWICFactory );
+	//Destroy();
+	//SafeRelease( g_pWICFactory );
 }
 void NND2DTexture::Destroy()
 {

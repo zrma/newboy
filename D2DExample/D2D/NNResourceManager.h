@@ -16,6 +16,7 @@ private:
 	static NNResourceManager* m_pInstance;
 
 private:
+	//std::map<std::wstring,NND2DTexture*> m_TextureTable1;
 	std::map<std::wstring,NNTexture*> m_TextureTable;
 
 private:

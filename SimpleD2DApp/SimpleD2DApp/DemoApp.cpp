@@ -171,9 +171,9 @@ LRESULT CALLBACK CDemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
 			PtrToUlong(pDemoApp)
 			);
 
-		ShowWindow(hwnd, SW_SHOWNOACTIVATE);
-		ShowWindow(hwnd, SW_SHOWMINNOACTIVE);
-		ShowWindow(hwnd, SHOW_OPENNOACTIVATE);
+// 		ShowWindow(hwnd, SW_SHOWNOACTIVATE);
+// 		ShowWindow(hwnd, SW_SHOWMINNOACTIVE);
+// 		ShowWindow(hwnd, SHOW_OPENNOACTIVATE);
 		
 		result = 1;
 	}

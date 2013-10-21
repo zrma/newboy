@@ -17,7 +17,7 @@ protected:
 
 public:
 	NNTexture(){}
-	virtual ~NNTexture(){}
+	virtual~NNTexture(){}
 
 	//virtual NNTexture* Create() = 0;
 	static NNTexture* Create( std::wstring path );
