@@ -86,7 +86,7 @@ HRESULT CRMRender::CreateResource()
 		{
 			//Create radial gradient brush
 			hr = m_pRenderTarget->CreateRadialGradientBrush(
-				D2D1::RadialGradientBrushProperties(D2D1::Point2F(150,150),D2D1::Point2F(25,25),150,150),
+				D2D1::RadialGradientBrushProperties(D2D1::Point2F(400,400),D2D1::Point2F(0,0),150,150),
 				m_pGradientStops, 
 				&m_pRadialGradientBrush
 				);
@@ -145,7 +145,7 @@ HRESULT CRMRender::Render()
 			D2D1::Point2F(0, 0),
 			D2D1::Point2F(500.0f, 500.0f),
 			m_pRadialGradientBrush,
-			0.5f
+			10.f
 			);
 
 		//radial ellipse
