@@ -1,5 +1,6 @@
 #include "RMConfig.h"
 #include "RMMainLoop.h"
+#include "RMTextureManager.h"
 
 CRMMainLoop* CRMMainLoop::m_pInstance = nullptr;
 
@@ -7,7 +8,7 @@ CRMMainLoop::CRMMainLoop(void):
 	m_HWnd(nullptr),
 	m_Fps(0), m_ElapsedTime(0), m_PrevTime(0), m_NowTime(0)
 {
-	m_Fps		= 1000/30;
+	m_Fps		= 1000/60;
 }
 
 
@@ -90,6 +91,12 @@ HRESULT CRMMainLoop::Initialize()
 		// 랜더 타겟 추가
 		hr = CRMRender::GetInstance()->CreateRenderTarget();
 	}
+
+	if(CRMTextureManager::GetInstance()->GetTextureMap().size() == 0)
+	{
+		CRMTextureManager::GetInstance()->InitTexture();
+	}
+	// 이미지 파일들 불러오기
 	
 	return hr;
 }
@@ -113,7 +120,7 @@ void CRMMainLoop::RunMessageLoop()
 		else
 		{
 			// 처리 해야 할 내부 로직들을 처리함
-			CRMRender::GetInstance()->MovePosition();
+			// CRMRender::GetInstance()->MovePosition();
 			// 임시로 추가함
 
 			m_NowTime = timeGetTime();

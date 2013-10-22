@@ -29,19 +29,5 @@ private:
 public:
 	ID2D1Factory*			GetD2DFactory() const { return m_pDirect2dFactory; }
 	ID2D1HwndRenderTarget*	GetRenderTarget() const { return m_pRenderTarget; }
-
-// Test
-private:
-	CRMTexture*			m_TestTexture[8];
-
-public:
-	void		MovePosition();
-	// 임시로 추가함
-
-private:
-	int			m_NowScene;
-	int			m_NowTime;
-	int			m_PrevTime;
-
 };
 

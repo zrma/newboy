@@ -5,7 +5,8 @@
 
 
 CRMTexture::CRMTexture(void) :
-	m_D2D1Bitmap(nullptr)
+	m_D2D1Bitmap(nullptr),
+	m_Width(0), m_Height(0), m_PositionX(0), m_PositionY(0)
 {
 
 }
@@ -68,6 +69,9 @@ HRESULT CRMTexture::Create( std::wstring path )
 		SafeRelease(bitmapFrameDecode);
 		SafeRelease(bitmapDecoder);
 	}
+
+	m_Width = m_D2D1Bitmap->GetSize().width;
+	m_Height = m_D2D1Bitmap->GetSize().height;
 
 	SafeRelease( bitmapFrameDecode );
 	SafeRelease( bitmapDecoder );

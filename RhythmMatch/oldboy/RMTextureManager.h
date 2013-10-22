@@ -1,4 +1,6 @@
 #pragma once
+#include "RMTexture.h"
+#include <map>
 
 class CRMTextureManager
 {
@@ -19,6 +21,16 @@ private:
 
 private:
 	IWICImagingFactory*			m_pWICFactory;
+
+private:
+	std::map<std::wstring, CRMTexture*>
+								m_TextureMap;
+
+public:
+	HRESULT						InitTexture();
+	std::map<std::wstring, CRMTexture*>	
+								GetTextureMap() { return m_TextureMap; }
+	CRMTexture*					GetTexture( std::wstring key ) { return m_TextureMap[key]; }
 
 private:
 	// 여기 추가해야 할 것들
