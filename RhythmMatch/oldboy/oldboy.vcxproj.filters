@@ -14,9 +14,6 @@
     <Filter Include="Core">
       <UniqueIdentifier>{42ee390b-7534-4d64-b96d-f1d592286cea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Manager">
-      <UniqueIdentifier>{8bbbc66b-1c3a-4f7a-8c09-9f8260a0ac00}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core\Loop">
       <UniqueIdentifier>{e84446d3-bb4b-4aa9-9867-d22382a511b9}</UniqueIdentifier>
     </Filter>
@@ -25,6 +22,9 @@
     </Filter>
     <Filter Include="Core\Object">
       <UniqueIdentifier>{f41b8739-1848-4e91-b5b6-9f05dc918b92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Texture">
+      <UniqueIdentifier>{8bbbc66b-1c3a-4f7a-8c09-9f8260a0ac00}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,9 +56,12 @@
       <Filter>Core\Render</Filter>
     </ClInclude>
     <ClInclude Include="RMTextureManager.h">
-      <Filter>Core\Manager</Filter>
+      <Filter>Core\Texture</Filter>
     </ClInclude>
     <ClInclude Include="RMTexture.h">
+      <Filter>Core\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="RMObject.h">
       <Filter>Core\Object</Filter>
     </ClInclude>
   </ItemGroup>
@@ -76,9 +79,12 @@
       <Filter>Core\Render</Filter>
     </ClCompile>
     <ClCompile Include="RMTextureManager.cpp">
-      <Filter>Core\Manager</Filter>
+      <Filter>Core\Texture</Filter>
     </ClCompile>
     <ClCompile Include="RMTexture.cpp">
+      <Filter>Core\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="RMObject.cpp">
       <Filter>Core\Object</Filter>
     </ClCompile>
   </ItemGroup>

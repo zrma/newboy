@@ -1,5 +1,6 @@
 #include "RMConfig.h"
 #include "RMTextureManager.h"
+#include "RMMainLoop.h"
 
 CRMTextureManager* CRMTextureManager::m_pInstance = nullptr;
 

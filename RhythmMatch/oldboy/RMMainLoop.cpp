@@ -15,6 +15,7 @@ CRMMainLoop::CRMMainLoop(void):
 CRMMainLoop::~CRMMainLoop(void)
 {
 	CRMRender::ReleaseInstance();
+	CRMTextureManager::ReleaseInstance();
 }
 
 CRMMainLoop* CRMMainLoop::GetInstance()
@@ -92,10 +93,7 @@ HRESULT CRMMainLoop::Initialize()
 		hr = CRMRender::GetInstance()->CreateRenderTarget();
 	}
 
-	if(CRMTextureManager::GetInstance()->GetTextureMap().size() == 0)
-	{
-		CRMTextureManager::GetInstance()->InitTexture();
-	}
+	CRMTextureManager::GetInstance()->InitTexture();
 	// 이미지 파일들 불러오기
 	
 	return hr;
